@@ -2,10 +2,16 @@
  * The clerkMiddleware helper enables authentication 
  */
 
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-import { clerkMiddleware } from "@clerk/nextjs/server";
+const isPublicRoute =
+  createRouteMatcher(["/", "/sign-in(.*)", "/sign-up(.*)"])
 
-export default clerkMiddleware();
+export default clerkMiddleware((auth, req) => {
+  if (!isPublicRoute(req)) { // if the route is not public, it should be protected
+    auth().protect()
+  }
+});
 
 export const config = {
   matcher: [

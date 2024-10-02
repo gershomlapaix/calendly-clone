@@ -18,6 +18,7 @@ export const EventTable = pgTable("events", {
     clerkUserIdIndex: index("clerkUserIdIndex").on(table.clerkUserId)
 }))
 
+// table for setting the time zone for the user
 export const ScheduleTable = pgTable("schedules", {
     id: uuid("id").primaryKey().defaultRandom(),
     timezone: text("timezone").notNull(),
@@ -32,6 +33,7 @@ export const scheduleRelations = relations(ScheduleTable, ({ many }) => ({
 
 export const scheduleDayOfWeekEnum = pgEnum("day", DAYS_OF_WEEK_IN_ORDER)
 
+// table for all time slots in a timezone for the user
 export const ScheduleAvailabilityTable = pgTable("scheduleAvailabilities", {
     id: uuid("id").primaryKey().defaultRandom(),
     scheduleId: uuid("scheduleId").notNull()

@@ -14,7 +14,7 @@ export default function HomePage() {
       <Button asChild>
         <SignUpButton/>
       </Button>
-      <UserButton/>
+      {/* <UserButton/> */}
     </div>
   </div>)
 }

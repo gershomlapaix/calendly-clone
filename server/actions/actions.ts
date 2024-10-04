@@ -44,3 +44,21 @@ export async function updateEvent(id: string, unsafeData: z.infer<typeof eventFo
     }
     redirect("/events")
 }
+
+export async function deleteEvent(id: string):
+    Promise<{ error: boolean } | undefined> {
+    const { userId } = auth()
+
+    if (userId == null) {
+        return { error: true }
+    }
+
+    const { rowCount } = await db
+        .delete(EventTable)
+        .where(and(eq(EventTable.id, id), eq(EventTable.clerkUserId, userId))) // updat the event with given id, check if the user created is the one updating it
+
+    if (rowCount === 0) {
+        return { error: true }
+    }
+    redirect("/events")
+}

@@ -10,20 +10,28 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import Link from 'next/link'
 import { Switch } from '../ui/switch'
-import { createEvent } from '@/server/actions/actions'
+import { createEvent, updateEvent } from '@/server/actions/actions'
 
-
-function EventForm() {
+function EventForm({ event }: {
+    event?: {
+        id: string,
+        name: string,
+        description?: string,
+        durationInMinutes: number,
+        isActive: boolean
+    }
+}) {
     const form = useForm<z.infer<typeof eventFormSchema>>({
         resolver: zodResolver(eventFormSchema),
-        defaultValues: {
+        defaultValues: event ?? {
             isActive: true,
             durationInMinutes: 30
         }
     })
 
     async function onSubmit(values: z.infer<typeof eventFormSchema>) {
-        const data = await createEvent(values)
+        const action = event == null ? createEvent : updateEvent.bind(null, event.id)
+        const data = await action(values)
 
         if (data?.error) {
             form.setError("root", { message: "There was an error saving your event" })
@@ -84,7 +92,7 @@ function EventForm() {
                 (<FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                        <Input type="number" className='resize-none h-32'  {...field} />
+                        <Input type="text" className='resize-none h-32'  {...field} />
                     </FormControl>
 
                     <FormDescription>

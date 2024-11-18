@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useTransition } from 'react'
+import React, { useTransition } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -167,11 +167,11 @@ function EventForm({ event }: {
                     )
                 }
 
-                <Button asChild variant="outline">
+                <Button disabled={isDeletePending || form.formState.isSubmitting} asChild variant="outline">
                     <Link href="/events">Cancel</Link>
                 </Button>
 
-                <Button type='submit'>Save</Button>
+                <Button type='submit' disabled={isDeletePending || form.formState.isSubmitting}>Save</Button>
             </div>
         </form>
     </Form>
